@@ -32,7 +32,18 @@
       </div>
 
       <section class="products">
-        <h2>Top Products</h2>
+        <div class="products-toolbar">
+          <h2>Top Products</h2>
+          <label class="sort-control" for="product-sort">
+            Sort:
+            <select id="product-sort" name="product-sort">
+              <option value="name-asc">Name: A-Z</option>
+              <option value="name-desc">Name: Z-A</option>
+              <option value="price-asc">Price: Low-High</option>
+              <option value="price-desc">Price: High-Low</option>
+            </select>
+          </label>
+        </div>
         <ul class="product-list">
           
         </ul>
