@@ -38,6 +38,43 @@ export default class ProductList {
     this.dataSource = dataSource;
     this.listElement = listElement;
     this.searchQuery = searchQuery;
+    this.currentSort = "name-asc";
+    this.products = [];
+  }
+
+  sortProducts(products, sortOption = this.currentSort) {
+    const items = Array.isArray(products) ? [...products] : [];
+
+    switch (sortOption) {
+      case "name-desc":
+        return items.sort((a, b) =>
+          (b.NameWithoutBrand || "").localeCompare(a.NameWithoutBrand || ""),
+        );
+      case "price-asc":
+        return items.sort(
+          (a, b) => Number(a.FinalPrice || 0) - Number(b.FinalPrice || 0),
+        );
+      case "price-desc":
+        return items.sort(
+          (a, b) => Number(b.FinalPrice || 0) - Number(a.FinalPrice || 0),
+        );
+      case "name-asc":
+      default:
+        return items.sort((a, b) =>
+          (a.NameWithoutBrand || "").localeCompare(b.NameWithoutBrand || ""),
+        );
+    }
+  }
+
+  bindSortControl() {
+    const sortControl = document.querySelector("#product-sort");
+    if (!sortControl) return;
+
+    sortControl.value = this.currentSort;
+    sortControl.onchange = (event) => {
+      this.currentSort = event.target.value;
+      this.renderList(this.products);
+    };
   }
 
   // Fetches product data and renders the page title and product list.
@@ -45,7 +82,9 @@ export default class ProductList {
     const list = this.searchQuery
       ? await this.dataSource.searchProducts(this.searchQuery)
       : await this.dataSource.getData(this.category);
-    this.renderList(list);
+    this.products = Array.isArray(list) ? list : [];
+    this.bindSortControl();
+    this.renderList(this.products);
 
     const title = document.querySelector(".products h2");
     if (title) {
@@ -61,12 +100,14 @@ export default class ProductList {
   }
 
   // Renders the products returned by the API, while still linking known product pages when available.
-  renderList(list) {
-    const products = Array.isArray(list) ? list : [];
+  renderList(list = this.products) {
+    const products = this.sortProducts(list, this.currentSort);
     renderListWithTemplate(
       (product) => productCardTemplate(product, this.category || "tents"),
       this.listElement,
       products,
+      "afterbegin",
+      true,
     );
   }
 }

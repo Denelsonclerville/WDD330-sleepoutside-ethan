@@ -236,6 +236,30 @@ button {
   padding: 1rem;
 }
 
+.products-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.sort-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+}
+
+.sort-control select {
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--light-grey);
+  border-radius: 0.35rem;
+  background-color: #fff;
+  font: inherit;
+}
+
 .product-list {
   display: flex;
   flex-flow: row wrap;
